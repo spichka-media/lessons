@@ -23,9 +23,9 @@ export default function Component({
         <PdfDocument
           props={{
             scrollKey,
-            fileId: document,
-            pageStart,
-            pageEnd,
+            fileId: +document, // cast to number (wp sends string)
+            pageStart: +pageStart, // cast to number (wp sends string)
+            pageEnd: +pageEnd, // cast to number (wp sends string)
           }}
         />
       );

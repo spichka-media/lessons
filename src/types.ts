@@ -1,63 +1,32 @@
-export type ModulesResponse = Array<Module>;
+export type CoursesResponse = Array<Course>;
 
-export type Module = {
+export type Course = {
   id: number;
-  date: string;
-  date_gmt: string;
-  guid: {
-    rendered: string;
-  };
-  modified: string;
-  modified_gmt: string;
+  count: number;
+  description: string;
+  name: string;
   slug: string;
-  status: string;
-  type: string;
-  link: string;
+};
+
+export type LessonsResponse = Array<Lesson>;
+
+export type Lesson = {
+  id: number;
+  slug: string;
   title: {
     rendered: string;
   };
-  content: {
-    rendered: string;
-    protected: boolean;
-  };
-  template: string;
-  lessons: Array<{
-    _type: string;
+  topics: Array<{
     title: string;
-    description: string;
-    topics: Array<{
-      _type: string;
+    resources: Array<{
       title: string;
-      resources: Array<{
-        _type: string;
-        title: string;
-        type: "document" | "text";
-        document_page_start: number;
-        document_page_end: number;
-        document: number;
-        text: string;
-      }>;
+      type: string;
+      document_page_start: string;
+      document_page_end: string;
+      document: string;
+      text: string;
     }>;
   }>;
-  _links: {
-    self: Array<{
-      href: string;
-    }>;
-    collection: Array<{
-      href: string;
-    }>;
-    about: Array<{
-      href: string;
-    }>;
-    "wp:attachment": Array<{
-      href: string;
-    }>;
-    curies: Array<{
-      name: string;
-      href: string;
-      templated: boolean;
-    }>;
-  };
 };
 
 export type AttachmentResponse = {
@@ -117,7 +86,8 @@ export type AttachmentResponse = {
   };
 };
 
-export type ModuleLesson = ModulesResponse[number]["lessons"][number];
+// TODO: Replace these types
+export type ModuleLesson = Lesson;
 export type ModuleLessonTopic = ModuleLesson["topics"][number];
 export type ModuleLessonTopicResource = ModuleLessonTopic["resources"][number];
 

@@ -1,64 +1,42 @@
-import { useCallback, useEffect, useRef } from "react";
-import {
-  PdfViewerComponent,
-  Toolbar,
-  Magnification,
-  Navigation,
-  TextSearch,
-  Inject,
-  PageChangeEventArgs,
-} from "@syncfusion/ej2-react-pdfviewer";
+"use client";
 
-const arrayRange = (start: number, stop: number, step: number = 1): number[] =>
-  Array.from(
-    { length: (stop - start) / step + 1 },
-    (value, index) => start + index * step
-  );
+import range from "lodash.range";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { pdfjs, Document, Page } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
 
 type Props = {
   pageStart: number;
   pageEnd: number;
   url: string;
-  onPageChange?: (e: PageChangeEventArgs) => void;
 };
 
 export default function Component({
-  props: { url, pageEnd, pageStart, onPageChange },
+  props: { url, pageEnd, pageStart },
 }: {
   props: Props;
 }) {
-  const pdfViewerRef = useRef<PdfViewerComponent>(null);
-
-  const goToPage = useCallback((pageStart: number) => {
-    pdfViewerRef.current?.navigationModule.goToPage(pageStart);
-  }, []);
-
-  useEffect(() => {
-    goToPage(pageStart);
-  }, [pageStart]);
+  const pageRange = useMemo(() => {
+    return range(pageStart, pageEnd + 1);
+  }, [pageStart, pageEnd]);
 
   return (
-    <PdfViewerComponent
-      ref={pdfViewerRef}
-      documentPath={url}
-      resourceUrl="https://cdn.syncfusion.com/ej2/24.1.41/dist/ej2-pdfviewer-lib"
-      documentLoad={() => goToPage(pageStart)}
-      pageChange={onPageChange}
-      toolbarSettings={{
-        showTooltip: false,
-        toolbarItems: [
-          "UndoRedoTool",
-          "PageNavigationTool",
-          "MagnificationTool",
-          "SelectionTool",
-          "SearchOption",
-        ],
-      }}
-      enableNavigation={true}
-      style={{ height: "100vh" }}
-      enableThumbnail={false}
-    >
-      <Inject services={[Toolbar, Navigation, Magnification, TextSearch]} />
-    </PdfViewerComponent>
+    <div>
+      <Document file={url}>
+        {pageRange.map((page) => {
+          return (
+            <Page
+              width={700} // TODO: Make it apadtive
+              pageNumber={page}
+              renderAnnotationLayer={false}
+              renderTextLayer={false}
+            />
+          );
+        })}
+      </Document>
+    </div>
   );
 }

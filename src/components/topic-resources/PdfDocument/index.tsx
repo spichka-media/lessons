@@ -1,8 +1,6 @@
 import { AttachmentResponse, Status } from "@/types";
 import PdfDocument from "../../common/PdfDocument";
-import { useCallback, useEffect, useState } from "react";
-
-import { PageChangeEventArgs } from "@syncfusion/ej2-react-pdfviewer";
+import { useEffect, useState } from "react";
 
 type Props = {
   fileId: number;
@@ -36,13 +34,6 @@ export default function Component({
 
     setInitialPage(Number(savedInitialPage));
   }, [status, scrollKey]);
-
-  const onPageChange = useCallback(
-    (e: PageChangeEventArgs) => {
-      scrollKey && localStorage.setItem(scrollKey, String(e.currentPageNumber));
-    },
-    [scrollKey]
-  );
 
   useEffect(() => {
     const cachedMetadata = cache[fileId];
@@ -82,7 +73,6 @@ export default function Component({
       {status === "success" && metadata && (
         <PdfDocument
           props={{
-            onPageChange,
             url: metadata.source_url,
             pageStart: initialPage ?? pageStart,
             pageEnd,

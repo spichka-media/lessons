@@ -3,21 +3,13 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import slugify from "slugify";
 import TopicResource from "../../topic-resources/TopicResource";
-import { Module, ModuleLesson } from "@/types";
-
-const maxWidth = 600;
+import { Lesson } from "@/types";
 
 type Props = {
-  lesson: ModuleLesson;
-  module: Module;
-  lessonIndex: number;
+  lesson: Lesson;
 };
 
-export default function Page({
-  props: { lesson, module, lessonIndex },
-}: {
-  props: Props;
-}) {
+export default function Page({ props: { lesson } }: { props: Props }) {
   const [activeTopicIdx, setActiveTopicIdx] = useState<number>(0);
   const [activeTopicResourceIdx, setActiveTopicResourceIdx] =
     useState<number>(0);
@@ -31,7 +23,7 @@ export default function Page({
   }, [activeTopicMeta, activeTopicResourceIdx]);
 
   const scrollKey = useMemo(() => {
-    return `${module.id}_${lessonIndex}_${activeTopicIdx}_${activeTopicResourceIdx}_scroll`;
+    return `${module.id}_${lesson.slug}_${activeTopicIdx}_${activeTopicResourceIdx}_scroll`;
   }, [activeTopicIdx, activeTopicResourceIdx]);
 
   return (

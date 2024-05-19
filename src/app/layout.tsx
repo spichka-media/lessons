@@ -1,12 +1,7 @@
-"use client";
-
-import { registerLicense } from "@syncfusion/ej2-base";
 import { Inter } from "next/font/google";
 import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
-
-registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_LICENSE!);
 
 export default function RootLayout({
   children,
